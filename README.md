@@ -1,8 +1,8 @@
 # M5Stack-OttoDIY
 
-![M5Stack-OttoDIY](https://github.com/mongonta0716/M5Stack-OttoDIY/blob/master/img/2020_02_170001.jpg)
-
-![M5Stack-OttoDIY-Rear](https://github.com/mongonta0716/M5Stack-OttoDIY/blob/master/img/2020_02_170003.jpg)
+<img src="./img/2020_02_170001.jpg" width="640">
+<img src="./img/2020_02_170003.jpg" width="320">
+<img src="./img/2020_02_170002.jpg" width="320">
 
 ## Movie
 [![M5Stack OttoDIY](http://img.youtube.com/vi/yAGh-t5SWbA/0.jpg)](http://www.youtube.com/watch?v=yAGh-t5SWbA "M5Stack OttoDIY")
@@ -30,6 +30,13 @@ Print each STL file on the required number of 3D printers.
 I currently use a bulk battery that no one can buy.
 Battery holder (M5Stack-OttoDIY_batteryHolder_v1.stl) needs to be changed according to your mobile battery. 
 
+# Create a circuit on M5Stack Proto module.
+Create a circuit on the M5Stack Proto module so that an 8p pin header emerges from M5Stack-OttoDIY_base_v1.stl.
+
+<img src="./img/2020_02_170005.jpg" width="640">
+
+## Wiring Diagram
+<img src="./img/M5Stack_proto.png" width="640">
 
 # CREDITS
 - [First M5Stack-OttoDIY](https://togetter.com/li/1374900) by [@robo8080](https://twitter.com/robo8080)

@@ -5,15 +5,20 @@
 //-- (c) Juan Gonzalez-Gomez (Obijuan), Dec 2011
 //-- GPL license
 //--------------------------------------------------------------
-#if defined(ARDUINO) && ARDUINO >= 100
-  #include "Arduino.h"
-#else
-  #include "WProgram.h"
-  #include <pins_arduino.h>
-#endif
-
 #include "Oscillator.h"
 
+Oscillator::Oscillator(void) {
+
+}
+
+Oscillator::Oscillator(Adafruit_PWMServoDriver* pwm, int ch, int servomin, int servomax, int trim) {
+    this->_pwm = pwm;
+    this->_ch = ch;
+    this->_servomin = servomin;
+    this->_servomax = servomax;
+    this->_trim     = trim;
+    attach();
+}
 //-- This function returns true if another sample
 //-- should be taken (i.e. the TS time has passed since
 //-- the last sample was taken
@@ -36,49 +41,41 @@ bool Oscillator::next_sample()
 //-- Attach an oscillator to a servo
 //-- Input: pin is the arduino pin were the servo
 //-- is connected
-void Oscillator::attach(int pin, bool rev)
+void Oscillator::attach(bool rev)
 {
-  //-- If the oscillator is detached, attach it.
-  if(!_servo.attached()){
-
     //-- Attach the servo and move it to the home position
-      _servo.attach(pin);
-      _servo.write(90);
+//    servo_write(90);
 
-      //-- Initialization of oscilaltor parameters
-      _TS=30;
-      _T=2000;
-      _NN = _T/_TS;
-      _inc = 2*M_PI/_NN;
+    //-- Initialization of oscilaltor parameters
+    _TS=30;
+    _T=2000;
+    _NN = _T/_TS;
+    _inc = 2*M_PI/_NN;
 
-      _previousMillis=0;
+    _previousMillis=0;
 
-      //-- Default parameters
-      _A=45;
-      _phase=0;
-      _phase0=0;
-      _O=0;
-      _stop=false;
+    //-- Default parameters
+    _A=45;
+    _phase=0;
+    _phase0=0;
+    _O=0;
+    _stop=false;
 
-      //-- Reverse mode
-      _rev = rev;
-  }
-      
+    //-- Reverse mode
+    _rev = rev;
+    
 }
+      
 
 //-- Detach an oscillator from his servo
 void Oscillator::detach()
 {
-   //-- If the oscillator is attached, detach it.
-  if(_servo.attached())
-        _servo.detach();
-
 }
 
 /*************************************/
 /* Set the oscillator period, in ms  */
 /*************************************/
-void Oscillator::SetT(unsigned int T)
+void Oscillator::setT(unsigned int T)
 {
   //-- Assign the new period
   _T=T;
@@ -92,9 +89,9 @@ void Oscillator::SetT(unsigned int T)
 /* Manual set of the position  */
 /******************************/
 
-void Oscillator::SetPosition(int position)
+void Oscillator::setPosition(int position)
 {
-  _servo.write(position+_trim);
+  servo_write(position);
 };
 
 
@@ -114,7 +111,7 @@ void Oscillator::refresh()
         //-- Sample the sine function and set the servo pos
          _pos = round(_A * sin(_phase + _phase0) + _O);
 	       if (_rev) _pos=-_pos;
-         _servo.write(_pos+90+_trim);
+         servo_write(_pos+90);
       }
 
       //-- Increment the phase
@@ -123,4 +120,12 @@ void Oscillator::refresh()
       _phase = _phase + _inc;
 
   }
+}
+
+void Oscillator::servo_write(int ang) {
+
+    ang = ang + _trim;
+    ang = map(ang, 0 , 180 , _servomin, _servomax);
+    _pwm->setPWM(_ch, 0, ang);
+
 }
